@@ -16,7 +16,9 @@ var autoLinkBugs = function () {
   elemMsg.innerHTML = newMsg
 }
 
-autoLinkBugs()
+if (/.+\/\+\/[0-9a-f]{5,40}/.test(location.pathname)) {
+  autoLinkBugs()
+}
 
 // ideas:
 // - show bug title in the tooltip
