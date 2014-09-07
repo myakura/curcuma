@@ -2,3 +2,9 @@ Curcuma
 =======
 
 Enhanse Blink changelogs.
+
+Features
+--------
+
+- modify the changeset title to include summary
+- autolink Bugs
