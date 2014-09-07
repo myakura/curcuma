@@ -14,6 +14,6 @@ var updateTitle = function () {
   document.title = repo + ' - ' + hash + ' \u2014 ' + summary
 }
 
-if (/.+\/\+\/[0-9a-f]{5,40}/.test(location.pathname)) {
+if (/.+\/\+\/[0-9a-f]{5,40}$/.test(location.pathname)) {
   updateTitle()
 }
