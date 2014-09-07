@@ -1,10 +1,11 @@
 {
   "manifest_version": 2,
   "name": "Curcuma",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Enhance Blink changelogs.",
   "permissions": [
-    "https://chromium.googlesource.com/*"
+    "https://chromium.googlesource.com/*",
+    "https://code.google.com/*"
   ],
   "content_scripts": [
     {
