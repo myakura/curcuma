@@ -1,7 +1,7 @@
 Curcuma
 =======
 
-Enhanse Blink changelogs.
+Enhance Blink changelogs.
 
 Features
 --------
