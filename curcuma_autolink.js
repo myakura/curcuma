@@ -45,7 +45,7 @@ var addBugTitle = function () {
   })
 }
 
-if (/.+\/\+\/[0-9a-f]{5,40}$/.test(location.pathname)) {
+if (/.+\/\+\/[0-9a-f]{5,40}(?:%5E%21)?\/?$/.test(location.pathname)) {
   autoLinkBugs()
   addBugTitle()
 }
