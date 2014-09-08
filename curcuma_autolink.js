@@ -49,6 +49,3 @@ if (/.+\/\+\/[0-9a-f]{5,40}$/.test(location.pathname)) {
   autoLinkBugs()
   addBugTitle()
 }
-
-// ideas:
-// - link to test files

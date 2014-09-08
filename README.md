@@ -1,7 +1,7 @@
 Curcuma
 =======
 
-Enhance Blink changelogs.
+Enhance Chromium/Blink changelogs.
 
 Features
 --------
