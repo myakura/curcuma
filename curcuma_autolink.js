@@ -23,6 +23,8 @@ var request = function (url, options) {
 var autoLinkBugs = function () {
   var reBugs = /BUG=(\d+)(?:,\s*)?(\d+)?(?:,\s*)?(\d+)?(?:,\s*)?(\d+)?(?:,\s*)?(\d+)?/
   var elemMsg = document.querySelector('.commit-message')
+  if (!reBugs.test(elemMsg.textContent)) { return }
+
   var commitMsg = elemMsg.innerHTML.trim()
   var bugIDs = reBugs.exec(elemMsg.textContent).slice(1).filter(function (v) { return !!v })
 
@@ -38,7 +40,7 @@ var autoLinkBugs = function () {
 
 var addBugTitle = function () {
   var crbugs = [].slice.call(document.querySelectorAll('.crbug[href]'))
-  crbugs.forEach(function (a) {
+  !!crbugs.length && crbugs.forEach(function (a) {
     request(a.href, { type: 'document' }).then(function (response) {
       a.title = response.querySelector('span.h3').textContent
     })
