@@ -1,25 +1,5 @@
 'use strict'
 
-var request = function (url, options) {
-  return new Promise(function (resolve, reject) {
-    var xhr = new XMLHttpRequest()
-    xhr.open('GET', url)
-    xhr.responseType = !!options && options.type || ''
-    xhr.onload = function () {
-      if (xhr.status === 200) {
-        resolve(xhr.response)
-      }
-      else {
-        reject(new Error(xhr.statusText))
-      }
-    }
-    xhr.onerror = function () {
-      reject(new Error(xhr.statusText))
-    }
-    xhr.send()
-  })
-}
-
 var autoLinkBugs = function () {
   var reBugs = /BUG=(\d+)(?:,\s*)?(\d+)?(?:,\s*)?(\d+)?(?:,\s*)?(\d+)?(?:,\s*)?(\d+)?/
   var elemMsg = document.querySelector('.commit-message')

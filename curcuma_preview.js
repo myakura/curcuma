@@ -1,25 +1,5 @@
 'use strict'
 
-var request = function (url, options) {
-  return new Promise(function (resolve, reject) {
-    var xhr = new XMLHttpRequest()
-    xhr.open('GET', url)
-    xhr.responseType = !!options && options.type || ''
-    xhr.onload = function () {
-      if (xhr.status === 200) {
-        resolve(xhr.response)
-      }
-      else {
-        reject(new Error(xhr.statusText))
-      }
-    }
-    xhr.onerror = function () {
-      reject(new Error(xhr.statusText))
-    }
-    xhr.send()
-  })
-}
-
 var supportedImages = new Map([
   ['png', 'image/png'],
   ['jpg', 'image/jpeg'],
