@@ -17,11 +17,10 @@ var ext = checkPath() ? /.*\.(.+)$/.exec(url.pathname)[1] : ''
 
 var addPreviewImage = function (base64Body) {
   var dataURL = 'data:' + supportedImages.get(ext) + ';base64,' + base64Body
-  var previewFragment = 
-  '<figure class="preview">\n' +
-  '<style>.preview { margin: 1em 0; padding: 1em 2em; border: #ddd solid; border-width: 1px 0; }</style>\n' +
-  '<img src="' + dataURL + '">\n' +
-  '</figure>'
+  var previewFragment =
+    '<figure class="curcuma-preview">\n' +
+    '<img src="' + dataURL + '">\n' +
+    '</figure>'
   document.querySelector('.footer').insertAdjacentHTML('beforebegin', previewFragment)
 }
 
