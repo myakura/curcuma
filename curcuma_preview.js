@@ -28,3 +28,20 @@ if (!!ext && !!supportedImages.has(ext)) {
   var imagePath = url.origin + url.pathname
   request(imagePath + '?format=TEXT').then(addPreviewImage)
 }
+
+var getExtension = function (path) {
+  var pathname = /^https?/.test(path) ? new URL(path).pathname : path
+  return (/.*\.(.+)$/.exec(path) || [])[1]
+}
+
+var diffHeaders = [].slice.call(document.querySelectorAll('.diff-header'))
+
+var imageDiffHeaders = diffHeaders.filter(function (elem) {
+  var a = elem.querySelector('a[href]')
+  var ext = getExtension(a.href)
+  return supportedImages.has(ext)
+})
+
+imageDiffHeaders.forEach(function (idh) {
+  idh.insertAdjacentHTML('afterend', '<figure class="curcuma-preview"></figure>')
+})
