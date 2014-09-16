@@ -87,7 +87,7 @@ imageDiffHeaders.forEach(function (imageDiffHeader) {
     .catch(console.error)
   }
   else {
-    requestImagePromise(key, ext)
+    requestImagePromise(files.keys().next().value, ext)
     .then(function (imageFragment) {
       figureFragment += imageFragment + '</figure>'
       imageDiffHeader.insertAdjacentHTML('afterend', figureFragment)
