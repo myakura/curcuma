@@ -7,10 +7,12 @@
 }
 
 .curcuma-preview img {
+	display: inline-block;
 	vertical-align: bottom;
 	max-width: 45%;
-	display: inline-block;
+	min-width: 6px;
 	margin: 10px;
+	padding: 2px;
 	border: 1px solid;
 }
 
