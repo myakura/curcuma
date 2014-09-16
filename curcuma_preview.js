@@ -20,7 +20,7 @@ var addPreviewImage = function (base64Body) {
   var previewFragment =
     '<figure class="curcuma-preview">\n' +
     '<img src="' + dataURL + '">\n' +
-    '</figure>'
+    '</figure>\n'
   document.querySelector('.footer').insertAdjacentHTML('beforebegin', previewFragment)
 }
 
@@ -42,6 +42,55 @@ var imageDiffHeaders = diffHeaders.filter(function (elem) {
   return supportedImages.has(ext)
 })
 
-imageDiffHeaders.forEach(function (idh) {
-  idh.insertAdjacentHTML('afterend', '<figure class="curcuma-preview"></figure>')
+var getFilePaths = function (diffHeader) {
+  var result = new Map()
+  var links = [].slice.call(diffHeader.querySelectorAll('a[href]'))
+  var urls = new Map()
+  links.forEach(function (link) {
+    var href = link.href
+    var ext = getExtension(href)
+    result.set('ext', ext)
+    var content = link.textContent.trim()
+    var key = /^a\/.+/.test(content) ? 'old' : 'new'
+    urls.set(key, href)
+  })
+  result.set('urls', urls)
+  return result
+}
+
+imageDiffHeaders.forEach(function (imageDiffHeader) {
+  var filePaths = getFilePaths(imageDiffHeader)
+  var ext = filePaths.get('ext')
+  var files = filePaths.get('urls')
+
+  var figureFragment = '<figure class="curcuma-preview">'
+
+  var requestImagePromise = function (key, ext) {
+    return new Promise(function (resolve, reject) {
+      request(files.get(key) + '?format=TEXT')
+      .then(function (base64Body) {
+        var dataURL = 'data:' + supportedImages.get(ext) + ';base64,' + base64Body
+        resolve('<img class="image-' + key + '" src="' + dataURL + '">')
+      })
+      .catch(reject)
+    })
+  }
+
+  if (files.size === 2) {
+    var requestOld = requestImagePromise('old', ext)
+    var requestNew = requestImagePromise('new', ext)
+    Promise.all([requestOld, requestNew])
+    .then(function (imageFragments) {
+      figureFragment += imageFragments.join('') + '</figure>'
+      imageDiffHeader.insertAdjacentHTML('afterend', figureFragment)
+    })
+    .catch(console.error)
+  }
+  else {
+    requestImagePromise(key, ext)
+    .then(function (imageFragment) {
+      figureFragment += imageFragment + '</figure>'
+      imageDiffHeader.insertAdjacentHTML('afterend', figureFragment)
+    })
+  }
 })

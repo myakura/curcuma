@@ -4,3 +4,9 @@
   border: #ddd solid;
   border-width: 1px 0;
 }
+
+.curcuma-preview > img {
+	vertical-align: bottom;
+	max-width: 40vw;
+	display: inline-block;
+}
