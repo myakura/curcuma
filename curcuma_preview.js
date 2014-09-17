@@ -34,6 +34,7 @@ var getPreviewImage = function (url) {
   })
 }
 
+// kick off for file view
 if (validateImageURL(location.href)) {
   getPreviewImage(location.href).then(function (dataURL) {
     var previewFragment =
@@ -41,8 +42,8 @@ if (validateImageURL(location.href)) {
       '<img src="' + dataURL + '">\n' +
       '</figure>\n'
     document.querySelector('.footer').insertAdjacentHTML('beforebegin', previewFragment)
-    })
-  }
+  })
+}
 
 var supportedImages = new Map([
   ['png', 'image/png'],
