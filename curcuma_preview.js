@@ -48,13 +48,13 @@ if (validateImageURL(location.href)) {
 }
 
 // kick off for diff view
-var imageDiffHeaders = [].slice.call(document.querySelectorAll('.diff-header')).filter(function (diffHeader) {
+var imageDiffHeaders = query('.diff-header').filter(function (diffHeader) {
   var a = diffHeader.querySelector('a[href]')
   return validateImageURL(a.href)
 })
 imageDiffHeaders.forEach(function (imageDiffHeader) {
   // todo: add .image-old or .image-new to the <img>
-  var imageURLs = [].slice.call(imageDiffHeader.querySelectorAll('a[href]')).map(function (a) {
+  var imageURLs = query('a[href]', imageDiffHeader).map(function (a) {
     return a.href
   })
   Promise.all(imageURLs.map(getPreviewImage)).then(function (dataURLs) {

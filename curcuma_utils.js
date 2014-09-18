@@ -19,3 +19,9 @@ var request = function request (url, options) {
     xhr.send()
   })
 }
+
+var query = function query (selectors, scope) {
+  var scopeNode = scope === undefined ? document : scope
+  var nodelist = scopeNode.querySelectorAll(selectors)
+  return [].slice.call(nodelist)
+}

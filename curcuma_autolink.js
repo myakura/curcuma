@@ -19,7 +19,7 @@ var autoLinkBugs = function () {
 }
 
 var addBugTitle = function () {
-  var crbugs = [].slice.call(document.querySelectorAll('.crbug[href]'))
+  var crbugs = query('.crbug[href]')
   !!crbugs.length && crbugs.forEach(function (a) {
     request(a.href, { type: 'document' }).then(function (response) {
       a.title = response.querySelector('span.h3').textContent
