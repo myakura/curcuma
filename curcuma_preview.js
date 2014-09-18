@@ -1,5 +1,7 @@
 'use strict'
 
+// todo: handle TypeError thrown by URL()
+
 var getFileExtension = function (urlOrPath) {
   var pathname = /^https?/.test(urlOrPath) ? new URL(urlOrPath).pathname : urlOrPath
   return (/.*\.(.+)$/.exec(pathname) || [])[1]
@@ -45,79 +47,22 @@ if (validateImageURL(location.href)) {
   })
 }
 
-var supportedImages = new Map([
-  ['png', 'image/png'],
-  ['jpg', 'image/jpeg'],
-  ['jpeg', 'image/jpeg'],
-  ['webp', 'image/webp'],
-  ['svg', 'image/svg+xml'],
-  ['svgz', 'image/svg+xml'],
-])
-
-var url = new URL(location.href)
-
-var getExtension = function (path) {
-  var pathname = /^https?/.test(path) ? new URL(path).pathname : path
-  return (/.*\.(.+)$/.exec(path) || [])[1]
-}
-
-var diffHeaders = [].slice.call(document.querySelectorAll('.diff-header'))
-
-var imageDiffHeaders = diffHeaders.filter(function (elem) {
-  var a = elem.querySelector('a[href]')
-  var ext = getExtension(a.href)
-  return supportedImages.has(ext)
+// kick off for diff view
+var imageDiffHeaders = [].slice.call(document.querySelectorAll('.diff-header')).filter(function (diffHeader) {
+  var a = diffHeader.querySelector('a[href]')
+  return validateImageURL(a.href)
 })
-
-var getFilePaths = function (diffHeader) {
-  var result = new Map()
-  var links = [].slice.call(diffHeader.querySelectorAll('a[href]'))
-  var urls = new Map()
-  links.forEach(function (link) {
-    var href = link.href
-    var ext = getExtension(href)
-    result.set('ext', ext)
-    var content = link.textContent.trim()
-    var key = /^a\/.+/.test(content) ? 'old' : 'new'
-    urls.set(key, href)
-  })
-  result.set('urls', urls)
-  return result
-}
-
 imageDiffHeaders.forEach(function (imageDiffHeader) {
-  var filePaths = getFilePaths(imageDiffHeader)
-  var ext = filePaths.get('ext')
-  var files = filePaths.get('urls')
-
-  var figureFragment = '<figure class="curcuma-preview">'
-
-  var requestImagePromise = function (key, ext) {
-    return new Promise(function (resolve, reject) {
-      request(files.get(key) + '?format=TEXT')
-      .then(function (base64Body) {
-        var dataURL = 'data:' + supportedImages.get(ext) + ';base64,' + base64Body
-        resolve('<img class="image-' + key + '" src="' + dataURL + '">')
-      })
-      .catch(reject)
+  // todo: add .image-old or .image-new to the <img>
+  var imageURLs = [].slice.call(imageDiffHeader.querySelectorAll('a[href]')).map(function (a) {
+    return a.href
+  })
+  Promise.all(imageURLs.map(getPreviewImage)).then(function (dataURLs) {
+    var previewFragment = '<figure class="curcuma-preview">\n'
+    dataURLs.forEach(function (dataURL) {
+      previewFragment += '<img src="' + dataURL + '">\n'
     })
-  }
-
-  if (files.size === 2) {
-    var requestOld = requestImagePromise('old', ext)
-    var requestNew = requestImagePromise('new', ext)
-    Promise.all([requestOld, requestNew])
-    .then(function (imageFragments) {
-      figureFragment += imageFragments.join('') + '</figure>'
-      imageDiffHeader.insertAdjacentHTML('afterend', figureFragment)
-    })
-    .catch(console.error)
-  }
-  else {
-    requestImagePromise(files.keys().next().value, ext)
-    .then(function (imageFragment) {
-      figureFragment += imageFragment + '</figure>'
-      imageDiffHeader.insertAdjacentHTML('afterend', figureFragment)
-    })
-  }
+    previewFragment += '</figure>\n'
+    imageDiffHeader.insertAdjacentHTML('afterend', previewFragment)
+  })
 })
