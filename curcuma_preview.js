@@ -26,7 +26,6 @@ var validateImageURL = function (urlOrPath) {
 
 var getPreviewImage = function (url) {
   var url = new URL(url)
-  var extension = getFileExtension(url)
   var mime = getImageMIME(url)
 
   var imageDataURL = url.origin + url.pathname + '?format=TEXT'
