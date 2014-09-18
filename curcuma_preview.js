@@ -58,11 +58,12 @@ imageDiffHeaders.forEach(function (imageDiffHeader) {
     return a.href
   })
   Promise.all(imageURLs.map(getPreviewImage)).then(function (dataURLs) {
-    var previewFragment = '<figure class="curcuma-preview">\n'
-    dataURLs.forEach(function (dataURL) {
-      previewFragment += '<img src="' + dataURL + '">\n'
-    })
-    previewFragment += '</figure>\n'
+    var previewFragment =
+      '<figure class="curcuma-preview">\n' +
+      dataURLs.map(function (dataURL) {
+        return '<img src="' + dataURL + '">\n'
+      }).join('') +
+      '</figure>\n'
     imageDiffHeader.insertAdjacentHTML('afterend', previewFragment)
   })
 })
