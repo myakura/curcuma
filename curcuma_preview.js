@@ -52,15 +52,13 @@ var imageDiffHeaders = query('.diff-header').filter(function (diffHeader) {
   return validateImageURL(a.href)
 })
 imageDiffHeaders.forEach(function (imageDiffHeader) {
-  // todo: add .image-old or .image-new to the <img>
-  var imageURLs = query('a[href]', imageDiffHeader).map(function (a) {
-    return a.href
-  })
+  var imageURLs = query('a[href]', imageDiffHeader).map(function (a) { return a.href })
   Promise.all(imageURLs.map(getPreviewImage)).then(function (dataURLs) {
     var previewFragment =
       '<figure class="curcuma-preview">\n' +
-      dataURLs.map(function (dataURL) {
-        return '<img src="' + dataURL + '">\n'
+      dataURLs.map(function (dataURL, index) {
+        var classAtt = ' class="' + (!!index ? 'image-new' : 'image-old') + '"'
+        return '<img' + classAtt + ' src="' + dataURL + '">\n'
       }).join('') +
       '</figure>\n'
     imageDiffHeader.insertAdjacentHTML('afterend', previewFragment)
