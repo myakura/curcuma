@@ -22,7 +22,7 @@ var addBugTitle = function () {
   var crbugs = query('.crbug[href]')
   !!crbugs.length && crbugs.forEach(function (a) {
     request(a.href, { type: 'document' }).then(function (response) {
-      a.title = response.querySelector('span.h3').textContent
+      a.title = response.body.querySelector('span.h3').textContent
     })
   })
 }

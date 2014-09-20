@@ -29,8 +29,9 @@ var getPreviewImage = function (url) {
   var mime = getImageMIME(url)
 
   var imageDataURL = url.origin + url.pathname + '?format=TEXT'
-  return request(imageDataURL).then(function (base64Body) {
-    var dataURL = 'data:' + mime + ';base64,' + base64Body
+  // '?format=TEXT' returns a Base64-encoded body
+  return request(imageDataURL).then(function (response) {
+    var dataURL = 'data:' + mime + ';base64,' + response.body
     return (dataURL)
   })
 }
