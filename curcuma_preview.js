@@ -9,10 +9,12 @@ var getFileExtension = function (urlOrPath) {
 
 var getImageMIME = function (urlOrPath) {
   var mimeMap = new Map([
+    ['gif', 'image/gif'],
     ['png', 'image/png'],
     ['jpg', 'image/jpeg'],
     ['jpeg', 'image/jpeg'],
     ['webp', 'image/webp'],
+    ['bmp', 'image/bmp'],
     ['svg', 'image/svg+xml'],
     ['svgz', 'image/svg+xml'],
   ])
