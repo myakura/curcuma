@@ -18,7 +18,7 @@ var getImageMIME = function (urlOrPath) {
     ['svg', 'image/svg+xml'],
     ['svgz', 'image/svg+xml'],
   ])
-  var extension = getFileExtension(urlOrPath)
+  var extension = ('' + getFileExtension(urlOrPath)).toLowerCase()
   return mimeMap.get(extension)
 }
 
