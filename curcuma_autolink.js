@@ -1,25 +1,27 @@
 'use strict'
 
-var autoLinkBugs = function () {
-  var reBugs = /BUG=(\d+)(?:,\s*)?(\d+)?(?:,\s*)?(\d+)?(?:,\s*)?(\d+)?(?:,\s*)?(\d+)?/
-  var elemMsg = document.querySelector('.commit-message')
+const autoLinkBugs = function () {
+  const reBugs = /BUG=(\d+)(?:,\s*)?(\d+)?(?:,\s*)?(\d+)?(?:,\s*)?(\d+)?(?:,\s*)?(\d+)?/
+  const elemMsg = document.querySelector('.commit-message')
   if (!reBugs.test(elemMsg.textContent)) { return }
 
-  var commitMsg = elemMsg.innerHTML.trim()
-  var bugIDs = reBugs.exec(elemMsg.textContent).slice(1).filter(function (v) { return !!v })
+  const commitMsg = elemMsg.innerHTML.trim()
+  const bugIDs = reBugs.exec(elemMsg.textContent).slice(1).filter(function (v) { return !!v })
 
-  var newMsg = commitMsg.replace(reBugs, function () {
-    var result = 'BUG='
-    bugIDs.forEach(function (id) {
-      result += '<a class="crbug" href="https://code.google.com/p/chromium/issues/detail?id=' + id + '">' + id + '</a>, '
-    })
-    return result.slice(0, -2)
+  const newMsg = commitMsg.replace(reBugs, function () {
+    const crbugPrefix = 'https://code.google.com/p/chromium/issues/detail?id='
+    const result = `BUG=${
+      bugIDs.map(function (id) {
+        return `<a class="crbug" href="${crbugPrefix + id}">${id}</a>`
+      }).join(', ')
+    }`
+    return result
   })
   elemMsg.innerHTML = newMsg
 }
 
-var addBugTitle = function () {
-  var crbugs = query('.crbug[href]')
+const addBugTitle = function () {
+  const crbugs = query('.crbug[href]')
   !!crbugs.length && crbugs.forEach(function (a) {
     request(a.href, { type: 'document' }).then(function (response) {
       a.title = response.body.querySelector('span.h3').textContent
