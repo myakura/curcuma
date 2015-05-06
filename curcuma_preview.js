@@ -58,13 +58,10 @@ const imageDiffHeaders = query('.diff-header').filter(function (diffHeader) {
   return validateImageURL(a.href)
 })
 imageDiffHeaders.forEach(function (imageDiffHeader) {
-  let className = ''
-  if (/new file mode/.test(imageDiffHeader.textContent)) {
-    className = 'image-new'
-  }
+  let className = /new file mode/.test(imageDiffHeader.textContent) ? 'image-new' : '' // newly added files
   const imageURLs = query('a[href]', imageDiffHeader).map(function (a) { return a.href })
   Promise.all(imageURLs.map(getPreviewImage)).then(function (dataURLs) {
-    var previewFragment = `
+    let previewFragment = `
 <figure class="curcuma-preview">${
   dataURLs.map(function (dataURL, index) {
     className = !!className || !!index ? 'image-new' : 'image-old'
