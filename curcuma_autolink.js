@@ -21,10 +21,24 @@ const autoLinkBugs = function () {
 }
 
 const addBugTitle = function () {
+  // a regex to extract issue title from crbug.com
+  // the <title> is formatted as follows. note the leading space:
+  // ```
+  //  <title>Issue 17217 - 
+  //  chromium -
+  //  
+  //  margin 0 css is causing horizontal scrollbar to show up 100% width - 
+  //  An open-source project to help move the web forward. - Google Project Hosting
+  //  </title>
+  // ```
+  const reTitle = /<title>.+\n .+\n .+\n (.+) - \n/
+
   const crbugs = query('.crbug[href]')
   !!crbugs.length && crbugs.forEach(function (a) {
-    request(a.href, { type: 'document' }).then(function (response) {
-      a.title = response.body.querySelector('span.h3').textContent
+    request(a.href).then(function (response) {
+      if (reTitle.test(response.body)) {
+        a.title = reTitle.exec(response.body)[1].trim()
+      }
     })
   })
 }
