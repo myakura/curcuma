@@ -1,13 +1,11 @@
 'use strict'
 
-// todo: handle TypeError thrown by URL()
-
-const getFileExtension = function (urlOrPath) {
-  const pathname = /^https?/.test(urlOrPath) ? new URL(urlOrPath).pathname : urlOrPath
+const getFileExtension = url => {
+  const pathname = new URL(url).pathname
   return (/.*\.(.+)$/.exec(pathname) || [])[1]
 }
 
-const getImageMIME = function (urlOrPath) {
+const getImageMIME = url => {
   const mimeMap = new Map([
     ['gif', 'image/gif'],
     ['png', 'image/png'],
@@ -18,31 +16,30 @@ const getImageMIME = function (urlOrPath) {
     ['svg', 'image/svg+xml'],
     ['svgz', 'image/svg+xml'],
   ])
-  const extension = (`${getFileExtension(urlOrPath)}`).toLowerCase()
+  const extension = (`${getFileExtension(url)}`).toLowerCase()
   return mimeMap.get(extension)
 }
 
-const validateImageURL = function (urlOrPath) {
-  return !!getFileExtension(urlOrPath) && !!getImageMIME(urlOrPath)
+const validateImageURL = url => {
+  return !!getFileExtension(url) && !!getImageMIME(url)
 }
 
-const getPreviewImage = function (imagePageURL) {
-  let url = new URL(imagePageURL)
+const getPreviewImage = imagePageURL => {
+  const url = new URL(imagePageURL)
   const mime = getImageMIME(url)
 
-  // '?format=TEXT' returns a Base64-encoded body
+  // adding '?format=TEXT' to the end returns a Base64-encoded body
   const imageDataURL = url.origin + url.pathname + '?format=TEXT'
 
-  return fetch(imageDataURL).then(function (response) {
-    return response.text().then(function (data) {
-      return `data:${mime};base64,${data}`
-    })
-  })
+  return fetch(imageDataURL)
+  .then(response => response.text())
+  .then(data => `data:${mime};base64,${data}`)
 }
 
 // kick off for file view
 if (validateImageURL(location.href)) {
-  getPreviewImage(location.href).then(function (dataURL) {
+  getPreviewImage(location.href)
+  .then(dataURL => {
     const previewFragment = `
 <figure class="curcuma-preview">
 <img src="${dataURL}">
@@ -50,20 +47,21 @@ if (validateImageURL(location.href)) {
 `
     document.querySelector('.footer').insertAdjacentHTML('beforebegin', previewFragment)
   })
+  .catch(console.log.bind(console))
 }
 
 // kick off for diff view
-const imageDiffHeaders = query('.diff-header').filter(function (diffHeader) {
-  const a = diffHeader.querySelector('a[href]')
-  return validateImageURL(a.href)
+const imageDiffHeaders = query('.diff-header').filter(diffHeader => {
+  return validateImageURL(diffHeader.querySelector('a[href]').href)
 })
-imageDiffHeaders.forEach(function (imageDiffHeader) {
+imageDiffHeaders.forEach(imageDiffHeader => {
   let className = /new file mode/.test(imageDiffHeader.textContent) ? 'image-new' : '' // newly added files
-  const imageURLs = query('a[href]', imageDiffHeader).map(function (a) { return a.href })
-  Promise.all(imageURLs.map(getPreviewImage)).then(function (dataURLs) {
+  const imageURLs = query('a[href]', imageDiffHeader).map(a => a.href)
+  Promise.all(imageURLs.map(getPreviewImage))
+  .then(dataURLs => {
     let previewFragment = `
 <figure class="curcuma-preview">${
-  dataURLs.map(function (dataURL, index) {
+  dataURLs.map((dataURL, index) => {
     className = !!className || !!index ? 'image-new' : 'image-old'
     return `<img class="${className}" src="${dataURL}">`
   }).join('')
@@ -71,4 +69,5 @@ imageDiffHeaders.forEach(function (imageDiffHeader) {
 `
     imageDiffHeader.insertAdjacentHTML('afterend', previewFragment)
   })
+  .catch(console.log.bind(console))
 })

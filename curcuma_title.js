@@ -3,7 +3,7 @@
 // modifying changeset title to include summary
 // original: [hash] - [repo/dir] - Git at Google
 // modified: [repo/dir] - [shorthash] -- [summary]
-const updateTitle = function () {
+const updateTitle = () => {
   const message = document.querySelector('.commit-message').textContent
   const summary = message.match(/(.*)\n/)[1]
   const title = document.title
