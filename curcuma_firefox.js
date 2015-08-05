@@ -1,8 +1,10 @@
+'use strict'
+
 const data = require('sdk/self').data
 const pageMod = require('sdk/page-mod')
 
 pageMod.PageMod({
-  include: "https://chromium.googlesource.com/*",
+  include: 'https://chromium.googlesource.com/*',
   contentScriptFile: [
     data.url('../curcuma_utils.js'),
     data.url('../curcuma_title.js'), 
@@ -10,6 +12,6 @@ pageMod.PageMod({
     data.url('../curcuma_preview.js'),
   ],
   contentStyleFile: [
-    data.url('../curcuma_preview.css')
-  ]
+    data.url('../curcuma_preview.css'),
+  ],
 })

@@ -59,7 +59,7 @@ imageDiffHeaders.forEach(imageDiffHeader => {
   const imageURLs = query('a[href]', imageDiffHeader).map(a => a.href)
   Promise.all(imageURLs.map(getPreviewImage))
   .then(dataURLs => {
-    let previewFragment = `
+    const previewFragment = `
 <figure class="curcuma-preview">${
   dataURLs.map((dataURL, index) => {
     className = !!className || !!index ? 'image-new' : 'image-old'
