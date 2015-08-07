@@ -1,6 +1,6 @@
 {
   "title": "Curcuma",
-  "name": "Curcuma",
+  "name": "curcuma",
   "version": "0.11.0",
   "description": "Enhance Chromium/Blink changelogs.",
   "author": "Masataka Yakura",
@@ -9,5 +9,6 @@
     "firefox": ">=38.0a1",
     "fennec": ">=38.0a1"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "id": "@curcuma"
 }
