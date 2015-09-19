@@ -1,23 +1,27 @@
 {
   "manifest_version": 2,
   "name": "Curcuma",
-  "version": "0.11.1",
-  "description": "Enhance Chromium/Blink changelogs.",
+  "version": "0.12.0",
+  "description": "Enhance changelogs on googlesource.com .",
   "permissions": [
-    "https://chromium.googlesource.com/*",
-    "https://code.google.com/*"
+    "https://*.googlesource.com/*"
   ],
   "content_scripts": [
     {
-      "matches": ["https://chromium.googlesource.com/*"],
+      "matches": ["https://*.googlesource.com/*"],
       "js": [
         "curcuma_utils.js",
         "curcuma_title.js",
-        "curcuma_autolink.js",
         "curcuma_preview.js"
       ],
       "css": [
         "curcuma_preview.css"
+      ]
+    },
+    {
+      "matches": ["https://chromium.googlesource.com/*"],
+      "js": [
+        "curcuma_autolink.js"
       ]
     }
   ]

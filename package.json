@@ -1,8 +1,8 @@
 {
   "title": "Curcuma",
   "name": "curcuma",
-  "version": "0.11.1",
-  "description": "Enhance Chromium/Blink changelogs.",
+  "version": "0.12.0",
+  "description": "Enhance changelogs on googlesource.com.",
   "author": "Masataka Yakura",
   "main": "curcuma_firefox.js",
   "engines": {
