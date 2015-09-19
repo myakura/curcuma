@@ -1,11 +1,11 @@
 Curcuma
 =======
 
-Enhance Chromium/Blink changelogs.
+Enhance changelogs on googlesource.com.
 
 Features
 --------
 
 - modify the changeset title to include summary
-- autolink bugs
-- image previews
+- image previews (for file view and diff view)
+- link to issues (chromium only)
