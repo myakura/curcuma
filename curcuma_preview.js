@@ -45,7 +45,7 @@ if (validateImageURL(location.href)) {
 <img src="${dataURL}">
 </figure>
 `
-    document.querySelector('.footer').insertAdjacentHTML('beforebegin', previewFragment)
+    document.querySelector('.FileContents-binary').insertAdjacentHTML('afterend', previewFragment)
   })
   .catch(console.log.bind(console))
 }
