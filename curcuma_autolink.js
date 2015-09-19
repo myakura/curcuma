@@ -2,7 +2,7 @@
 
 const autoLinkBugs = () => {
   const reBugs = /BUG=(\d+)(?:,\s*)?(\d+)?(?:,\s*)?(\d+)?(?:,\s*)?(\d+)?(?:,\s*)?(\d+)?/
-  const elemMessage = document.querySelector('.commit-message')
+  const elemMessage = document.querySelector('.MetadataMessage')
   if (!reBugs.test(elemMessage.textContent)) { return }
 
   const commitMessage = elemMessage.innerHTML.trim()

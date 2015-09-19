@@ -4,7 +4,7 @@
 // original: [hash] - [repo/dir] - Git at Google
 // modified: [repo/dir] - [shorthash] -- [summary]
 const updateTitle = () => {
-  const message = document.querySelector('.commit-message').textContent
+  const message = document.querySelector('.MetadataMessage').textContent
   const summary = message.match(/(.*)\n/)[1]
   const title = document.title
   const reTitle = /([0-9a-f]+) - (.+?) /

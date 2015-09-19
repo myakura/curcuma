@@ -51,7 +51,7 @@ if (validateImageURL(location.href)) {
 }
 
 // kick off for diff view
-const imageDiffHeaders = query('.diff-header').filter(diffHeader => {
+const imageDiffHeaders = query('.Diff').filter(diffHeader => {
   return validateImageURL(diffHeader.querySelector('a[href]').href)
 })
 imageDiffHeaders.forEach(imageDiffHeader => {
