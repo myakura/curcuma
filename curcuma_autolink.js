@@ -1,7 +1,7 @@
 'use strict'
 
 const autoLinkBugs = () => {
-  const reBugs = /BUG=(\d+)(?:,\s*)?(\d+)?(?:,\s*)?(\d+)?(?:,\s*)?(\d+)?(?:,\s*)?(\d+)?/
+  const reBugs = /BUG=\s*(\d+)(?:,\s*)?(\d+)?(?:,\s*)?(\d+)?(?:,\s*)?(\d+)?(?:,\s*)?(\d+)?/
   const elemMessage = document.querySelector('.MetadataMessage')
   if (!reBugs.test(elemMessage.textContent)) { return }
 
