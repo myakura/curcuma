@@ -8,7 +8,7 @@ const autoLinkBugs = () => {
   const commitMessage = elemMessage.innerHTML.trim()
   const bugIDs = reBugs.exec(elemMessage.textContent).slice(1).filter(v => !!v)
 
-  const crbugPrefix = 'https://code.google.com/p/chromium/issues/detail?id='
+  const crbugPrefix = 'https://bugs.chromium.org/p/chromium/issues/detail?id='
   const newBugLine = `BUG=${bugIDs.map(id => `<a class="crbug" href="${crbugPrefix + id}">${id}</a>`).join(', ')}`
   elemMessage.innerHTML = commitMessage.replace(reBugs, newBugLine)
 }
