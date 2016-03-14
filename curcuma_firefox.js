@@ -6,7 +6,6 @@ const pageMod = require('sdk/page-mod')
 pageMod.PageMod({
   include: 'https://*.googlesource.com/*',
   contentScriptFile: [
-    data.url('../curcuma_utils.js'),
     data.url('../curcuma_title.js'),
     data.url('../curcuma_preview.js'),
   ],

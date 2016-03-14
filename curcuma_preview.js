@@ -51,12 +51,12 @@ if (validateImageURL(location.href)) {
 }
 
 // kick off for diff view
-const imageDiffHeaders = query('.Diff').filter(diffHeader => {
+const imageDiffHeaders = Array.from(document.querySelectorAll('.Diff')).filter(diffHeader => {
   return validateImageURL(diffHeader.querySelector('a[href]').href)
 })
 imageDiffHeaders.forEach(imageDiffHeader => {
   let className = /new file mode/.test(imageDiffHeader.textContent) ? 'image-new' : '' // newly added files
-  const imageURLs = query('a[href]', imageDiffHeader).map(a => a.href)
+  const imageURLs = Array.from(imageDiffHeader.querySelectorAll('a[href]')).map(a => a.href)
   Promise.all(imageURLs.map(getPreviewImage))
   .then(dataURLs => {
     const previewFragment = `
