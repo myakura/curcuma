@@ -8,9 +8,8 @@ const updateTitle = () => {
   const summary = message.match(/(.*)\n/)[1]
   const title = document.title
   const reTitle = /([0-9a-f]+) - (.+?) /
-  const repo = reTitle.exec(title)[2]
-  const hash = reTitle.exec(title)[1].slice(0, 10)
-  document.title = repo + ' - ' + hash + ' \u2014 ' + summary
+  const [_, hash, repo] = reTitle.exec(title)
+  document.title = `${repo} - ${hash.slice(0, 10)} \u2014 ${summary}`
 }
 
 if (/.+\/\+\/[0-9a-f]{5,40}$/.test(location.pathname)) {
