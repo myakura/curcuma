@@ -32,7 +32,14 @@ const getPreviewImage = imagePageURL => {
   const imageDataURL = url.origin + url.pathname + '?format=TEXT'
 
   return fetch(imageDataURL)
-  .then(response => response.text())
+  .then(response => {
+    if (response.ok) {
+      return response.text()
+    }
+    else {
+      return Promise.reject(new Error(`No 20xs: ${response.statusText}`))
+    }
+  })
   .then(data => `data:${mime};base64,${data}`)
 }
 
