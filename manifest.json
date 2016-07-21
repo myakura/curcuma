@@ -3,30 +3,16 @@
   "name": "Curcuma",
   "version": "0.12.6",
   "description": "Enhance changelogs on googlesource.com.",
-  "permissions": [
-    "https://*.googlesource.com/*"
-  ],
+  "permissions": ["https://*.googlesource.com/*"],
   "content_scripts": [
     {
       "matches": ["https://*.googlesource.com/*"],
-      "js": [
-        "curcuma_title.js",
-        "curcuma_preview.js"
-      ],
-      "css": [
-        "curcuma_preview.css"
-      ]
+      "js": ["curcuma_title.js", "curcuma_preview.js"],
+      "css": ["curcuma_preview.css"]
     },
     {
       "matches": ["https://chromium.googlesource.com/*"],
-      "js": [
-        "curcuma_autolink.js"
-      ]
+      "js": ["curcuma_autolink.js"]
     }
-  ],
-  "applications": {
-    "gecko": {
-      "id": "@curcuma"
-    }
-  }
+  ]
 }
