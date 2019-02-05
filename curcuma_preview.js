@@ -1,9 +1,9 @@
-'use strict'
+'use strict';
 
 const getFileExtension = url => {
-  const pathname = new URL(url).pathname
-  return (/.*\.(.+)$/.exec(pathname) || [])[1]
-}
+  const pathname = new URL(url).pathname;
+  return (/.*\.(.+)$/.exec(pathname) || [])[1];
+};
 
 const getImageMIME = url => {
   const mimeMap = new Map([
@@ -15,66 +15,73 @@ const getImageMIME = url => {
     ['bmp', 'image/bmp'],
     ['svg', 'image/svg+xml'],
     ['svgz', 'image/svg+xml'],
-  ])
-  const extension = (`${getFileExtension(url)}`).toLowerCase()
-  return mimeMap.get(extension)
-}
+  ]);
+  const extension = `${getFileExtension(url)}`.toLowerCase();
+  return mimeMap.get(extension);
+};
 
 const validateImageURL = url => {
-  return !!getFileExtension(url) && !!getImageMIME(url)
-}
+  return !!getFileExtension(url) && !!getImageMIME(url);
+};
 
 const getPreviewImage = imagePageURL => {
-  const url = new URL(imagePageURL)
-  const mime = getImageMIME(url)
+  const url = new URL(imagePageURL);
+  const mime = getImageMIME(url);
 
   // adding '?format=TEXT' to the end returns a Base64-encoded body
-  const imageDataURL = url.origin + url.pathname + '?format=TEXT'
+  const imageDataURL = url.origin + url.pathname + '?format=TEXT';
 
   return fetch(imageDataURL)
-  .then(response => {
-    if (response.ok) {
-      return response.text()
-    }
-    else {
-      return Promise.reject(new Error(`No 20xs: ${response.statusText}`))
-    }
-  })
-  .then(data => `data:${mime};base64,${data}`)
-}
+    .then(response => {
+      if (response.ok) {
+        return response.text();
+      } else {
+        return Promise.reject(new Error(`No 20xs: ${response.statusText}`));
+      }
+    })
+    .then(data => `data:${mime};base64,${data}`);
+};
 
 // kick off for file view
 if (validateImageURL(location.href)) {
   getPreviewImage(location.href)
-  .then(dataURL => {
-    const previewFragment = `
+    .then(dataURL => {
+      const previewFragment = `
 <figure class="curcuma-preview">
 <img src="${dataURL}">
 </figure>
-`
-    document.querySelector('.FileContents-binary').insertAdjacentHTML('afterend', previewFragment)
-  })
-  .catch(console.log.bind(console))
+`;
+      document
+        .querySelector('.FileContents-binary')
+        .insertAdjacentHTML('afterend', previewFragment);
+    })
+    .catch(console.log.bind(console));
 }
 
 // kick off for diff view
-const imageDiffHeaders = Array.from(document.querySelectorAll('.Diff')).filter(diffHeader => {
-  return validateImageURL(diffHeader.querySelector('a[href]').href)
-})
+const imageDiffHeaders = Array.from(document.querySelectorAll('.Diff')).filter(
+  diffHeader => {
+    return validateImageURL(diffHeader.querySelector('a[href]').href);
+  },
+);
 imageDiffHeaders.forEach(imageDiffHeader => {
-  let className = /new file mode/.test(imageDiffHeader.textContent) ? 'image-new' : '' // newly added files
-  const imageURLs = Array.from(imageDiffHeader.querySelectorAll('a[href]')).map(a => a.href)
+  let className = /new file mode/.test(imageDiffHeader.textContent)
+    ? 'image-new'
+    : ''; // newly added files
+  const imageURLs = Array.from(imageDiffHeader.querySelectorAll('a[href]')).map(
+    a => a.href,
+  );
   Promise.all(imageURLs.map(getPreviewImage))
-  .then(dataURLs => {
-    const previewFragment = `
-<figure class="curcuma-preview">${
-  dataURLs.map((dataURL, index) => {
-    className = !!className || !!index ? 'image-new' : 'image-old'
-    return `<img class="${className}" src="${dataURL}">`
-  }).join('')
-}</figure>
-`
-    imageDiffHeader.insertAdjacentHTML('afterend', previewFragment)
-  })
-  .catch(console.log.bind(console))
-})
+    .then(dataURLs => {
+      const previewFragment = `
+<figure class="curcuma-preview">${dataURLs
+        .map((dataURL, index) => {
+          className = !!className || !!index ? 'image-new' : 'image-old';
+          return `<img class="${className}" src="${dataURL}">`;
+        })
+        .join('')}</figure>
+`;
+      imageDiffHeader.insertAdjacentHTML('afterend', previewFragment);
+    })
+    .catch(console.log.bind(console));
+});
